@@ -3,6 +3,7 @@ name: "OMDb"
 guid: "a628c0da-fac5-4c7e-9d1a-7134223f14c8"
 version: "1.0.0.0"
 targetAbi: "10.7.0.0"
+framework: "net5.0"
 owner: "jellyfin"
 overview: "Get metadata from OMDb"
 description: >
