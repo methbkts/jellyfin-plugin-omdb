@@ -10,6 +10,6 @@ description: >
   Get metadata from OMDb
 category: "Metadata"
 artifacts:
-- "Jellyfin.Plugins.Omdb.dll"
+- "Jellyfin.Plugin.Omdb.dll"
 changelog: >
   Remove from Jellyfin core.
