@@ -150,7 +150,7 @@ namespace Jellyfin.Plugin.Omdb
 
             var seasonResult = await GetSeasonRootObject(seriesImdbId, seasonNumber, cancellationToken).ConfigureAwait(false);
 
-            if (seasonResult == null)
+            if (seasonResult?.Episodes == null)
             {
                 return false;
             }
