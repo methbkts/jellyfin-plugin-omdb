@@ -25,4 +25,8 @@
       <ProjectReference Include="..\Jellyfin.Plugin.Omdb\Jellyfin.Plugin.Omdb.csproj" />
     </ItemGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <CodeAnalysisRuleSet>jellyfin-tests.ruleset</CodeAnalysisRuleSet>
+    </PropertyGroup>
+
 </Project>
