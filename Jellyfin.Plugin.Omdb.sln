@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellyfin.Plugin.Omdb", "Jellyfin.Plugin.Omdb\Jellyfin.Plugin.Omdb.csproj", "{713DEB60-93C9-40D1-A846-0031E948BF8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellyfin.Plugins.Omdb.Tests", "Jellyfin.Plugins.Omdb.Tests\Jellyfin.Plugins.Omdb.Tests.csproj", "{1EAE1F3A-D22E-46B5-A0AB-06B18DE6D5E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jellyfin.Plugin.Omdb.Tests", "Jellyfin.Plugin.Omdb.Tests\Jellyfin.Plugin.Omdb.Tests.csproj", "{1EAE1F3A-D22E-46B5-A0AB-06B18DE6D5E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

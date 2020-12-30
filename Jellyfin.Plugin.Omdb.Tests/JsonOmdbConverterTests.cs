@@ -4,7 +4,7 @@ using Jellyfin.Plugin.Omdb.Dtos;
 using Jellyfin.Plugin.Omdb.JsonConverters;
 using Xunit;
 
-namespace Jellyfin.Plugins.Omdb.Tests
+namespace Jellyfin.Plugin.Omdb.Tests
 {
     public class JsonOmdbConverterTests
     {
