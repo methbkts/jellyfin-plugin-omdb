@@ -21,7 +21,7 @@ namespace Jellyfin.Plugin.Omdb.Dtos
         /// <summary>
         /// Gets or sets the season.
         /// </summary>
-        public int Season { get; set; }
+        public int? Season { get; set; }
 
         /// <summary>
         /// Gets or sets the total seasons.

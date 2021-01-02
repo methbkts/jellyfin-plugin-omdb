@@ -4,9 +4,12 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Plugin.Omdb.Dtos;
+using Jellyfin.Plugin.Omdb.JsonConverters;
+using MediaBrowser.Common.Json;
 using MediaBrowser.Common.Net;
 using MediaBrowser.Controller.Configuration;
 using MediaBrowser.Controller.Entities;
@@ -17,7 +20,6 @@ using MediaBrowser.Controller.Providers;
 using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.IO;
 using MediaBrowser.Model.Providers;
-using MediaBrowser.Model.Serialization;
 
 namespace Jellyfin.Plugin.Omdb
 {
@@ -27,32 +29,33 @@ namespace Jellyfin.Plugin.Omdb
     public class OmdbItemProvider : IRemoteMetadataProvider<Series, SeriesInfo>,
         IRemoteMetadataProvider<Movie, MovieInfo>, IRemoteMetadataProvider<Trailer, TrailerInfo>
     {
-        private readonly IJsonSerializer _jsonSerializer;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ILibraryManager _libraryManager;
         private readonly IFileSystem _fileSystem;
         private readonly IServerConfigurationManager _configurationManager;
+        private readonly JsonSerializerOptions _jsonOptions;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OmdbItemProvider"/> class.
         /// </summary>
-        /// <param name="jsonSerializer">Instance of the <see cref="IJsonSerializer"/> interface.</param>
         /// <param name="httpClientFactory">Instance of the <see cref="IHttpClientFactory"/> interface.</param>
         /// <param name="libraryManager">Instance of the <see cref="ILibraryManager"/> interface.</param>
         /// <param name="fileSystem">Instance of the <see cref="IFileSystem"/> interface.</param>
         /// <param name="configurationManager">Instance of the <see cref="IServerConfigurationManager"/> interface.</param>
         public OmdbItemProvider(
-            IJsonSerializer jsonSerializer,
             IHttpClientFactory httpClientFactory,
             ILibraryManager libraryManager,
             IFileSystem fileSystem,
             IServerConfigurationManager configurationManager)
         {
-            _jsonSerializer = jsonSerializer;
             _httpClientFactory = httpClientFactory;
             _libraryManager = libraryManager;
             _fileSystem = fileSystem;
             _configurationManager = configurationManager;
+
+            _jsonOptions = new JsonSerializerOptions(JsonDefaults.GetOptions());
+            _jsonOptions.Converters.Add(new JsonOmdbNotAvailableStringConverter());
+            _jsonOptions.Converters.Add(new JsonOmdbNotAvailableStructConverter<int>());
         }
 
         /// <inheritdoc />
@@ -151,7 +154,7 @@ namespace Jellyfin.Plugin.Omdb
 
             if (isSearch)
             {
-                var searchResultList = await _jsonSerializer.DeserializeFromStreamAsync<SearchResultList>(stream).ConfigureAwait(false);
+                var searchResultList = await JsonSerializer.DeserializeAsync<SearchResultList>(stream, _jsonOptions, cancellationToken).ConfigureAwait(false);
                 if (searchResultList != null)
                 {
                     resultList.AddRange(searchResultList.Search);
@@ -159,8 +162,8 @@ namespace Jellyfin.Plugin.Omdb
             }
             else
             {
-                var result = await _jsonSerializer.DeserializeFromStreamAsync<SearchResult>(stream).ConfigureAwait(false);
-                if (string.Equals(result.Response, "true", StringComparison.OrdinalIgnoreCase))
+                var result = await JsonSerializer.DeserializeAsync<SearchResult>(stream, _jsonOptions, cancellationToken).ConfigureAwait(false);
+                if (result != null && string.Equals(result.Response, "true", StringComparison.OrdinalIgnoreCase))
                 {
                     resultList.Add(result);
                 }
@@ -240,7 +243,7 @@ namespace Jellyfin.Plugin.Omdb
                 result.Item.SetProviderId(MetadataProvider.Imdb, imdbId);
                 result.HasMetadata = true;
 
-                await new OmdbProvider(_jsonSerializer, _httpClientFactory, _fileSystem, _configurationManager)
+                await new OmdbProvider(_httpClientFactory, _fileSystem, _configurationManager)
                     .Fetch(result, imdbId, info.MetadataLanguage, info.MetadataCountryCode, cancellationToken).ConfigureAwait(false);
             }
 
@@ -274,7 +277,7 @@ namespace Jellyfin.Plugin.Omdb
                 result.Item.SetProviderId(MetadataProvider.Imdb, imdbId);
                 result.HasMetadata = true;
 
-                await new OmdbProvider(_jsonSerializer, _httpClientFactory, _fileSystem, _configurationManager)
+                await new OmdbProvider(_httpClientFactory, _fileSystem, _configurationManager)
                     .Fetch(result, imdbId, info.MetadataLanguage, info.MetadataCountryCode, cancellationToken).ConfigureAwait(false);
             }
 

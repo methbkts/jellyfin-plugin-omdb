@@ -138,7 +138,7 @@ namespace Jellyfin.Plugin.Omdb.Dtos
         /// <summary>
         /// Gets or sets the episode.
         /// </summary>
-        public int Episode { get; set; }
+        public int? Episode { get; set; }
 
         /// <summary>
         /// Gets the rotten tomato score.
