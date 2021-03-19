@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using MediaBrowser.Common.Net;
@@ -65,7 +66,7 @@ namespace Jellyfin.Plugin.Omdb
 
                 if (rootObject == null)
                 {
-                    throw new Exception("OMDb didn't return valid JSON.");
+                    throw new JsonException("OMDb didn't return valid JSON.");
                 }
 
                 if (!string.IsNullOrEmpty(rootObject.Poster))

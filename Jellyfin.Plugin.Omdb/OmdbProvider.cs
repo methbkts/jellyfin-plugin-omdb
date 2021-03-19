@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -77,7 +78,7 @@ namespace Jellyfin.Plugin.Omdb
 
             if (result == null)
             {
-                throw new Exception("OMDb didn't return valid JSON.");
+                throw new JsonException("OMDb didn't return valid JSON.");
             }
 
             // Only take the name and rating if the user's language is set to English, since Omdb has no localization
@@ -285,11 +286,12 @@ namespace Jellyfin.Plugin.Omdb
             return result;
         }
 
+        [SuppressMessage("Microsoft.Maintainability", "CA1508: Avoid dead conditional code", Justification = "See commented if below")]
         internal static bool IsValidSeries(Dictionary<string, string> seriesProviderIds)
         {
             if (seriesProviderIds.TryGetValue(MetadataProvider.Imdb.ToString(), out var id) && !string.IsNullOrEmpty(id))
             {
-                // This check should ideally never be necessary but we're seeing some cases of this and haven't tracked them down yet.
+                // TODO: This check should ideally never be necessary but we're seeing some cases of this and haven't tracked them down yet.
                 if (!string.IsNullOrWhiteSpace(id))
                 {
                     return true;
