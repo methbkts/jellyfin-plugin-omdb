@@ -1,6 +1,7 @@
 ---
 name: "OMDb"
 guid: "a628c0da-fac5-4c7e-9d1a-7134223f14c8"
+imageUrl: "https://repo.jellyfin.org/releases/plugin/images/jellyfin-plugin-omdb.png"
 version: "1.0.0.0"
 targetAbi: "10.7.0.0"
 framework: "net5.0"
@@ -10,6 +11,7 @@ description: >
   Get metadata from OMDb
 category: "Metadata"
 artifacts:
-- "Jellyfin.Plugin.Omdb.dll"
-changelog: >
-  Remove from Jellyfin core.
+  - "Jellyfin.Plugin.Omdb.dll"
+changelog: |
+  - Initial release
+  - split of from Jellyfin core
